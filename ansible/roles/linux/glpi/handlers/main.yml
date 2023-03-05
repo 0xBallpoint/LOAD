@@ -1,0 +1,5 @@
+---
+- name: Remove install.php
+  file:
+    path: "{{ glpi_install_path }}/glpi/install/install.php"
+    state: absent

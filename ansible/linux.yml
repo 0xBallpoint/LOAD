@@ -1,0 +1,18 @@
+---
+# Load datas
+- import_playbook: data.yml
+  vars:
+    data_path: "{{domain_name}}/data/"
+  tags: 'data'
+
+- name: Install GLPI
+  hosts: srv02
+  become: yes
+  roles:
+    - { role: 'linux/apache', tags: 'apache' }
+    - { role: 'linux/mysql', tags: 'mysql' }
+    - { role: 'linux/php', tags: 'php' }
+    - { role: 'linux/glpi', tags: 'glpi' }
+  vars:
+    glpi_user_password: "{{lab.domains['eriador.middle-earth.local'].users['glpi'].password}}"
+

@@ -1,0 +1,40 @@
+# https://docs.ansible.com/ansible/latest/collections/ansible/builtin/apt_module.html
+- name: install wireguard package
+  apt:
+    name: wireguard
+    state: present
+    update_cache: yes
+
+# https://docs.ansible.com/ansible/latest/collections/ansible/builtin/copy_module.html
+- name: create server wireguard config
+  template:
+    dest: /etc/wireguard/wg0.conf
+    src: lab_server.conf.j2
+    owner: root
+    group: root
+    mode: '0600'
+
+# https://docs.ansible.com/ansible/latest/collections/ansible/posix/sysctl_module.html
+- name: enable and persist ip forwarding
+  sysctl:
+    name: net.ipv4.ip_forward
+    value: "1"
+    state: present
+    sysctl_set: yes
+    reload: yes
+
+# https://docs.ansible.com/ansible/latest/collections/ansible/builtin/systemd_module.html
+- name: start wireguard and enable on boot
+  systemd:
+    name: wg-quick@wg0
+    enabled: yes
+    state: started
+
+- name: allow the forwarding and masquerading of network
+  shell:
+    cmd: ufw route allow in on wg0 out on eth0 && iptables -t nat -I POSTROUTING -o eth0 -j MASQUERADE
+
+- name: restart wireguard
+  systemd:
+    name: wg-quick@wg0
+    state: restarted 

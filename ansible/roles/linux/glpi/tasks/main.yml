@@ -1,0 +1,65 @@
+# from https://github.com/supertarto/ansible-glpi/
+- name: Include vars for glpi
+  ansible.builtin.include_vars:
+    file: vars/default.yml
+
+- name: Check if GLPI is already installed
+  stat:
+    path: "{{ glpi_install_path }}/glpi"
+  register: glpiinstalled
+
+- name: Download and extract GLPI
+  unarchive:
+    src: "{{ glpi_download_url }}"
+    remote_src: true
+    dest: "{{ glpi_install_path }}"
+    owner: "{{ glpi_web_owner }}"
+    group: "{{ glpi_web_group }}"
+    validate_certs: false
+  when: not glpiinstalled.stat.exists
+
+- name: Automatic installation
+  command: "php bin/console -n db:install -H {{ glpi_db_host }} -P {{ glpi_db_port }} -d {{ glpi_db_name }} -u {{ glpi_db_user }} -p {{ glpi_db_password }}"
+  args:
+    chdir: "{{ glpi_install_path }}/glpi"
+  when: not glpiinstalled.stat.exists
+  notify:
+    - Remove install.php
+
+- name: Set permisions to files directory
+  file:
+    path: "{{ glpi_install_path }}/glpi/files"
+    recurse: true
+    owner: "{{ glpi_web_owner }}"
+    group: "{{ glpi_web_group }}"
+  when: not glpiinstalled.stat.exists
+
+- name: Set permisions to config directory
+  file:
+    path: "{{ glpi_install_path }}/glpi/config"
+    recurse: true
+    owner: "{{ glpi_web_owner }}"
+    group: "{{ glpi_web_group }}"
+  when: not glpiinstalled.stat.exists
+
+- name: Download plugins
+  get_url:
+    url: "{{ item }}"
+    dest: "{{ glpi_install_path }}/glpi/plugins"
+  with_items: "{{ glpi_plugins_dl_addr }}"
+  when: glpi_plugins_dl_addr is defined
+
+- name: Unarchive plugins
+  unarchive:
+    src: "{{ glpi_install_path }}/glpi/plugins/{{ item }}"
+    dest: "{{ glpi_install_path }}/glpi/plugins"
+    owner: "{{ glpi_web_owner }}"
+    group: "{{ glpi_web_group }}"
+    remote_src: true
+  with_items: "{{ glpi_plugins_tar_name }}"
+  when: glpi_plugins_dl_addr is defined
+
+- name: Configure LDAP for GLPI
+  ansible.builtin.script: files/glpi_ldap.php {{ glpi_db_host }} {{ glpi_db_name }} {{ glpi_db_user }} {{ glpi_db_password }} {{ glpi_user_password }}
+  args:
+    executable: php

@@ -1,0 +1,59 @@
+####### VARIABLES #######
+
+variable "REGION" {
+  # Add your AWS preferred region
+  default = "eu-central-1"
+}
+
+variable "PATH_TO_PUBLIC_KEY" {
+  # Add the path to the public key you made in AWS like below
+  default = "./keys/TerraformKey.pub"
+}
+
+variable "PATH_TO_PRIVATE_KEY" {
+  # Add the path to the private key you made in AWS like below
+  default = "./keys/TerraformKey.pem"
+}
+
+variable "VPC_CIDR" {
+  default = "10.0.0.0/16"
+}
+
+variable "SUBNET1_CIDR" {
+  default = "10.0.1.0/24"
+}
+
+variable "DC01_IP" {
+  default = "10.0.1.10"
+}
+variable "SRV01_IP" {
+  default = "10.0.1.11"
+}
+
+variable "DC02_IP" {
+  default = "10.0.1.20"
+}
+variable "SRV02_IP" {
+  default = "10.0.1.21"
+}
+
+variable "DC03_IP" {
+  default = "10.0.1.30"
+}
+variable "SRV03_IP" {
+  default = "10.0.1.31"
+}
+
+variable "PUBLIC_DNS" {
+  default = "9.9.9.9"
+}
+
+variable "MANAGEMENT_IPS" {
+  # Add in the public IP Address you will be hitting the cloud from, for example the public IP of your home address or VPN
+  default = ["1.2.3.4/32", "5.6.7.8/32"]
+}
+
+#variable "S3_BUCKET" {
+#  # Add in the name of your S3 bucket / NOT USED
+#  default = "lab-bucket"
+#}

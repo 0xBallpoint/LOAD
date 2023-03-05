@@ -1,0 +1,10 @@
+---
+- name: "Read data files"
+  hosts: all
+  connection: local
+  vars_files:
+    - "{{data_path}}/config.json"
+  tasks:
+    - name: save the Json data to a Variable as a Fact
+      set_fact:
+        lab: "{{lab}}"

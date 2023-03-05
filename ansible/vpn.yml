@@ -1,0 +1,16 @@
+---
+- name: Setup VPN client
+  hosts: localhost
+  connection: local
+  vars:
+    # Use system python so apt package is available
+    ansible_python_interpreter: "/usr/bin/env python3"
+    # add as many clients as you want
+  roles:
+    - { role: 'vpn/client', tags: 'client' }
+
+- name: Setup VPN server
+  hosts: srv02
+  become: yes
+  roles:
+    - { role: 'vpn/server', tags: 'server' }

@@ -1,0 +1,30 @@
+---
+# Load datas
+- import_playbook: data.yml
+  vars:
+    data_path: "{{domain_name}}/data/"
+  tags: 'data'
+
+- name: "Install IIS"
+  hosts: srv01
+  roles:
+    - { role: 'iis', tags: 'iis'}
+
+- name: "Install MSSQL Express"
+  hosts: srv01, srv03
+  roles:
+    - { role: 'mssql', tags: 'mssql'}
+    - { role: 'mssql_link', tags: 'mssql, mssql_link'}
+  vars:
+    domain: "{{lab.hosts[dict_key].domain}}"
+    SQLSVCACCOUNT_NAME: "{{lab.hosts[dict_key].mssql.svcaccount}}"
+    SQLSVCACCOUNT: "{{domain}}\\{{SQLSVCACCOUNT_NAME}}"
+    SQLSVCPASSWORD: "{{lab.domains[domain].users[SQLSVCACCOUNT_NAME].password}}"
+    SQLYSADMIN: "{{SQLSVCACCOUNT}}"
+    domain_admin: "{{domain}}\\Administrator"
+    domain_admin_password: "{{lab.hosts[lab.domains[domain].dc].admin_password}}"
+    sql_sysadmins: "{{lab.hosts[dict_key].mssql.sysadmins}}"
+    executeaslogin: "{{lab.hosts[dict_key].mssql.executeaslogin}}"
+    executeasuser:  "{{lab.hosts[dict_key].mssql.executeasuser}}"
+    sa_password: "{{lab.hosts[dict_key].mssql.sa_password}}"
+    linked_servers: "{{lab.hosts[dict_key].mssql.linked_servers}}"

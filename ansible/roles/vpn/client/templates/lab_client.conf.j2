@@ -1,0 +1,23 @@
+[Interface]
+# The address your computer will use on the VPN
+Address = 10.0.20.{{ 9 + item|int }}/32
+
+# Load your privatekey from file
+PostUp = wg set %i private-key /etc/wireguard/lab_client{{ item }}.priv
+# Also ping the vpn server to ensure the tunnel is initialized
+PostUp = ping -c1 10.0.20.1
+
+[Peer]
+# VPN server's wireguard public key
+PublicKey = {{ server_pubkey }}
+
+# Public IP address of your srv02
+Endpoint = {{ groups['srv02'][0] }}:51820
+
+# 10.0.2.0/24 is the VPN subnet
+AllowedIPs = 10.0.20.0/24,10.0.1.0/24
+
+# To keep a connection open from the server to this client
+# (Use if you're behind a NAT, e.g. on a home network, and
+# want peers to be able to connect to you.)
+PersistentKeepalive = 25

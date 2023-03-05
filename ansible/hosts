@@ -1,0 +1,72 @@
+[all:vars]
+region=eu-central-1
+ansible_user=ansible
+; password should match the one in terraform/scripts
+ansible_password=AFMZCQAaukS5Wt44hbUF  
+ansible_connection=winrm
+ansible_winrm_server_cert_validation=ignore
+ansible_winrm_operation_timeout_sec=400
+ansible_winrm_read_timeout_sec=500
+enable_http_proxy=no
+ad_http_proxy=http://x.x.x.x:xxxx
+ad_https_proxy=http://x.x.x.x:xxxx
+; domain_name : folder with data and scripts
+domain_name=middle-earth.local
+
+; ----------------------------------
+; If you want to setup VPN, choose the number of clients
+vpn_clients=1
+
+; ----------------------------------
+; middle-earth.local
+[dc01:vars]
+ip=10.0.1.10
+dns_domain=10.0.1.10
+dict_key=dc01
+
+[srv01:vars]
+ip=10.0.1.11
+dns_domain=10.0.1.10
+dict_key=srv01
+
+; ----------------------------------
+; eriador.middle-earth.local
+[dc02:vars]
+ip=10.0.1.20
+dns_domain=10.0.1.10
+dict_key=dc02
+
+[srv02:vars]
+ansible_connection=ssh
+ansible_ssh_user=ubuntu
+ansible_ssh_private_key_file=../terraform/keys/TerraformKey.pem
+ansible_ssh_port=22
+host_key_checking = false
+
+; ----------------------------------
+; mordor.local
+[dc03:vars]
+ip=10.0.1.30
+dns_domain=10.0.1.30
+dict_key=dc03
+
+[srv03:vars]
+ip=10.0.1.31
+dns_domain=10.0.1.30
+dict_key=srv03
+
+; ------------------------------------------------
+; add IP here (use AWS CLI command in README.md)
+[dc02]
+3.125.6.5
+[srv02]
+3.70.227.231
+[srv01]
+54.93.50.204
+[srv03]
+18.185.46.246
+[dc01]
+3.70.202.248
+[dc03]
+3.70.47.109
+

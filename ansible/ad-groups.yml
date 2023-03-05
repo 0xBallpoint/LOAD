@@ -1,0 +1,29 @@
+---
+# Load datas
+- import_playbook: data.yml
+  vars:
+    data_path: "{{domain_name}}/data/"
+  tags: 'data'
+
+# set AD datas ==================================================================================================
+
+- name: "Adjust group membership"
+  hosts: dc01,srv01,dc02,dc03,srv03
+  roles:
+    - { role: "groups/membership", tags: 'membership'}
+  vars:
+    local_groups: "{{lab.hosts[dict_key].local_groups}}"
+
+
+# doesen't work see : https://github.com/ansible-collections/community.windows/blob/main/plugins/modules/win_domain_group_membership.ps1
+# ligne 62 : use the given credentials to distant domain -> wrong
+- name: cross domain groups
+  hosts: dc01,dc02,dc03
+  roles:
+  - { role: 'groups/cross_domains', tags: 'cross_domains'}
+  vars:
+    domain: "{{lab.hosts[dict_key].domain}}"
+#    domain_server: "{{lab.hosts[dict_key].hostname}}"
+    domain_username: "{{domain}}\\Administrator"
+    domain_password: "{{lab.hosts[dict_key].admin_password}}"
+    domain_groups_members: "{{lab.domains[domain].multi_domain_groups_member}}"

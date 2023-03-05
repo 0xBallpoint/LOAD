@@ -1,0 +1,46 @@
+- name: Ensure that domain exists
+  win_domain:
+    domain_netbios_name : "{{netbios_name}}"
+    dns_domain_name: "{{domain}}"
+    safe_mode_password: "{{safe_mode_password}}"
+  register: check_domain
+
+- name: Reboot to complete domain creation
+  win_reboot:
+    reboot_timeout: 600
+    post_reboot_delay: 100
+  when: check_domain.changed
+
+- name: Ensure the server is a domain controller
+  win_domain_controller:
+    dns_domain_name: "{{domain}}"
+    domain_admin_user: "Administrator@{{domain}}"
+    domain_admin_password: "{{admin_password}}"
+    safe_mode_password: "{{safe_mode_password}}"
+    state: domain_controller
+  register: check_domain_controller
+
+- name: Reboot to complete domain controller setup
+  win_reboot:
+    reboot_timeout: 600
+    post_reboot_delay: 100
+  when: check_domain_controller.changed
+
+- name: Check for xDnsServer Powershell module
+  win_psmodule:
+    name: xDnsServer
+    state: present
+
+- name: Configure DNS Forwarders
+  win_dsc:
+    resource_name: xDnsServerForwarder
+    IsSingleInstance: 'yes'
+    UseRootHint: false
+    IPAddresses:
+      - "1.1.1.1"
+      - "9.9.9.9"
+
+- name: "Install ActiveDirectoryDSC"
+  win_psmodule:
+    name: ActiveDirectoryDSC
+    state: present

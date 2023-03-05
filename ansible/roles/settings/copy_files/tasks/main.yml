@@ -1,0 +1,9 @@
+- name: Create directory
+  win_file:
+    path: C:\tmp
+    state: directory
+
+- name: Download LOAD img in C:\tmp
+  win_copy:
+    src: LOAD.jpg
+    dest: C:\tmp\LOAD.jpg

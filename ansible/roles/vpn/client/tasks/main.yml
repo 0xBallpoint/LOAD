@@ -1,0 +1,20 @@
+- name: make sure wireguard directory exist
+  file:
+    path: wireguard
+    state: directory
+
+- name: generate private key
+  shell:
+    cmd: wg genkey | tee lab_client{{ item }}.priv | wg pubkey > lab_client{{ item }}.pub
+    chdir: wireguard
+    creates: wireguard/lab_client{{ item }}.pub
+  with_sequence: start=1 end="{{ vpn_clients }}"
+
+- name: create client wireguard config
+  template:
+    dest: wireguard/lab_client{{ item }}.conf
+    src: lab_client.conf.j2
+    mode: 0600
+  vars:
+    key: "{{ lookup('file', 'wireguard/lab_client{{ item }}.pub') }}"
+  with_sequence: start=1 end="{{ vpn_clients }}"

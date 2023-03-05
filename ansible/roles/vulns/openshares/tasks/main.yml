@@ -1,0 +1,55 @@
+# SMB share users only
+- name: Ensure directory structure for public share exists
+  win_file:
+    path: C:\shares\public
+    state: directory
+
+- name: Ensure public share exists
+  win_share:
+    name: public
+    description: Basic Read share for all domain users
+    path: C:\shares\public
+    list: yes
+    full: Administrators
+    change: Users
+
+# allow anonymous on win10 (https://docs.microsoft.com/fr-fr/troubleshoot/windows-server/networking/guest-access-in-smb2-is-disabled-by-default)
+
+- name: Add or update registry path to allow guest access in SMB
+  win_regedit:
+    path: HKLM:\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters
+    name: AllowInsecureGuestAuth
+    data: 1
+    type: dword
+
+# allow guest user
+- name: activate guest account
+  win_command: net user guest /active:yes
+
+# SMB share anonymous
+- name: Ensure directory structure for backup share exists
+  win_file:
+    path: C:\shares\backup
+    state: directory
+
+- name: Add backup share everyone rights
+  win_acl:
+    path: C:\shares\backup
+    user: Everyone
+    rights: FullControl
+    type: allow
+    state: present
+
+- name: backup share
+  win_share:
+    name: all
+    description: Basic RW share for backup directory
+    path: C:\shares\backup
+    list: yes
+    full: Everyone
+
+- name: copy GPO with cpassword to backup share
+  copy:
+    src: backup
+    dest: C:\shares\backup
+    directory_mode:

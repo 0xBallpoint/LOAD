@@ -1,0 +1,11 @@
+# {{ ansible_managed }}
+[Interface]
+Address = 10.0.20.1/24
+ListenPort = 51820
+PrivateKey = {{ server_privkey }}
+
+{% for item in range(1,vpn_clients+1) %}
+[Peer]
+PublicKey = {{ lookup('file', 'wireguard/lab_client'+item|string+'.pub') }}
+AllowedIPs = 10.0.20.{{ 9 + item|int }}
+{% endfor %}

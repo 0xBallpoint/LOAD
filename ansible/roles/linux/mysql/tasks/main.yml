@@ -1,0 +1,53 @@
+- name: Include vars for mysql
+  ansible.builtin.include_vars:
+    file: vars/default.yml
+
+- name: Installing Mysql and dependencies
+  package:
+    name: "{{item}}"
+    state: present
+    update_cache: yes
+  loop:
+    - mysql-server
+    - mysql-client 
+    - python3-mysqldb
+    - libmysqlclient-dev
+  become: yes    
+
+- name: start and enable mysql service
+  service:
+    name: mysql
+    state: started
+    enabled: yes    
+
+- name: Ensure root user can only login from localhost
+  mysql_user:
+    login_password: "{{ mysql_root_password }}"
+    check_implicit_admin: yes
+    name: root
+    host: "{{ item }}"
+    password: "{{ mysql_root_password }}"
+    state: present
+  with_items:
+    - localhost
+    - 127.0.0.1
+    - ::1
+
+- name: creating mysql user
+  mysql_user:
+    login_user: root
+    login_password: "{{ mysql_root_password }}"
+    name: "{{db_user}}"
+    password: "{{db_pass}}"
+    priv: '*.*:ALL'
+    host: '%'
+    state: present    
+
+- name: creating db
+  mysql_db:
+    login_user: root
+    login_password: "{{ mysql_root_password }}"
+    name: "{{db_name}}"
+    state: present   
+  notify:
+    - Restart mysql

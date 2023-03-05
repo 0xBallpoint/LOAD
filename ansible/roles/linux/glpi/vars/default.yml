@@ -1,0 +1,12 @@
+---
+glpi_install_path: "/var/www"
+glpi_download_url: "https://github.com/glpi-project/glpi/releases/download/10.0.1/glpi-10.0.1.tgz"
+
+glpi_web_owner: "www-data"
+glpi_web_group: "www-data"
+
+glpi_db_host: "localhost"
+glpi_db_port: "3306"
+glpi_db_name: "glpi"
+glpi_db_user: "glpi"
+glpi_db_password: "bxO5jHJs1bVCgFo"

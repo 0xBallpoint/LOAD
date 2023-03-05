@@ -1,0 +1,1 @@
+This folder stores your private and public key made from AWS for terraform to set it all up for you

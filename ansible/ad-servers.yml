@@ -1,0 +1,43 @@
+---
+# Load datas
+- import_playbook: data.yml
+  vars:
+    data_path: "{{domain_name}}/data/"
+  tags: 'data'
+
+# parent controlers
+- name: Main DC AD configuration
+  hosts: dc01,dc03
+  roles:
+  - { role: 'main_domain', tags: 'main_domains' }
+  vars:
+    domain: "{{lab.hosts[dict_key].domain}}"
+    netbios_name: "{{lab.domains[domain].netbios_name}}"
+    admin_password: "{{lab.hosts[dict_key].admin_password}}"
+    safe_mode_password: "{{lab.domains[domain].safe_mode_password}}"
+
+# child
+- name: Child DC AD configuration
+  hosts: dc02
+  roles:
+    - { role: 'child_domain', tags: 'child_domains'}
+  vars:
+    domain: "{{lab.hosts[dict_key].domain}}"
+    netbios_name: "{{lab.domains[domain].netbios_name}}"
+    parent_domain: "{{'.'.join(domain.split('.')[1:])}}"
+    parent_admin_password: "{{lab.hosts[lab.domains[parent_domain].dc].admin_password}}"
+    source_dc: "{{lab.hosts[lab.domains[parent_domain].dc].hostname}}.{{parent_domain}}"
+    safe_mode_password: "{{lab.domains[domain].safe_mode_password}}"
+
+- name: Servers AD configuration
+  hosts: srv01,srv03
+  roles:
+    - { role: 'server_domain', tags: 'servers'}
+  vars:
+    member_domain: "{{lab.hosts[dict_key].domain}}"
+    domain_admin_password: "{{lab.hosts[lab.domains[member_domain].dc].admin_password}}"
+
+- name: Change password policy
+  hosts: dc01,dc02,dc03
+  roles:
+    - { role: 'password_policy', tags: 'passpol', try_before_lock: "5", pass_length: "5", lock_duration: "00:05:00", lock_observation: "00:05:00", complexity: false}

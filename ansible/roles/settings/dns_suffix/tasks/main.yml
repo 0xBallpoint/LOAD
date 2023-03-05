@@ -1,0 +1,5 @@
+- name: "Change DNS suffix list"
+  ansible.windows.win_powershell:
+    script: |
+      Set-DnsClientGlobalSetting -SuffixSearchList @("{{region}}.ec2-utilities.amazonaws.com","{{region}}.compute.internal","{{domain}}","{{parent_domain}}")
+  register: dns_suffix

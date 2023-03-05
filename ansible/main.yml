@@ -1,0 +1,28 @@
+---
+# Run scripts
+- import_playbook: prepare.yml
+
+# create servers configuration
+- import_playbook: ad-servers.yml
+# create the trust relationships
+- import_playbook: ad-trusts.yml
+# import the ad datas : users/groups...
+- import_playbook: ad-data.yml
+# create IIS and MSSQL
+- import_playbook: servers.yml
+# set the rights and the group domains relations
+- import_playbook: ad-groups.yml
+# add adcs and adcs templates
+- import_playbook: adcs.yml
+# set ACL 
+- import_playbook: ad-acl.yml
+# configure linux with GLPI
+- import_playbook: linux.yml
+
+# --------------------------------------------------------------------
+# enable or disable windows defender here
+- import_playbook: security.yml
+
+# --------------------------------------------------------------------
+# specifics vulns linked to the scenario are here
+- import_playbook: vulnerabilities.yml

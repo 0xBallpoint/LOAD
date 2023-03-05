@@ -1,0 +1,7 @@
+- name: Add dns server zone
+  community.windows.win_dns_zone:
+    name: "{{zone_name}}"
+    type: forwarder
+    replication: none
+    dns_servers:
+      - "{{remote_dc_ip}}"

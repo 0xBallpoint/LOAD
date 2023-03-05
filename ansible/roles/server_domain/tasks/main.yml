@@ -1,0 +1,23 @@
+- name: "Set configure dns to {{dns_domain}}"
+  win_dns_client:
+    adapter_names: 'Ethernet'
+    ipv4_addresses:
+    - "{{dns_domain}}"
+
+- name: Verify File Server Role is installed.
+  win_feature:
+    name: File-Services, FS-FileServer
+    state: present
+    include_management_tools: True
+
+- name: "Add member server"
+  win_domain_membership:
+    dns_domain_name: "{{member_domain}}"
+    domain_admin_user: "Administrator@{{member_domain}}"
+    domain_admin_password: "{{domain_admin_password}}"
+    state: domain
+  register: domain_state
+
+- name: Reboot if needed
+  win_reboot:
+  when: domain_state.reboot_required

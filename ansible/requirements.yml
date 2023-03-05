@@ -1,0 +1,8 @@
+---
+collections:
+  # Install a collection from Ansible Galaxy.
+  - name: ansible.windows
+    version: 1.11.0
+  - name: community.general
+  - name: community.windows
+    version: 1.11.0

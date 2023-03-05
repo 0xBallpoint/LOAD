@@ -1,0 +1,51 @@
+---
+# Load datas
+- import_playbook: data.yml
+  vars:
+    data_path: "{{domain_name}}/data/"
+  tags: 'data'
+
+- name: Prepare common windows hosts settings
+  hosts: dc01,dc02,dc03,srv01,srv03
+  roles:
+    - { role: 'settings/common', tags: 'common'}
+    - { role: 'settings/keyboard', tags: 'keyboard', layout: "fr-FR"}
+
+# do not add srv with no update -> generate error on iis install
+- name: Disable update on DCs
+  hosts: dc01,dc02,dc03
+  roles:
+    - { role: 'settings/no_updates', tags: 'no_updates' }
+
+- name: Launch windows updates on Servers before continue
+  hosts: srv01,srv03
+  roles:
+    - { role: 'settings/updates', tags: 'updates'}
+
+- name: Set Windows admin password and hostname
+  hosts: dc01,dc02,dc03,srv01,srv03
+  roles:
+    - { role: 'settings/admin_password', tags: 'admin_password' }
+    - { role: 'settings/hostname', tags: 'hostname' }
+  vars:
+    admin_password: "{{lab.hosts[dict_key].admin_password}}"
+    hostname: "{{lab.hosts[dict_key].hostname}}"
+
+- name: Change servers DNS suffix list
+  hosts: dc01,dc02,dc03,srv01,srv03
+  roles:
+    - { role: 'settings/dns_suffix', tags: 'dns_suffix' }
+  vars:
+    parent_domain: "{{'.'.join(domain.split('.')[-2:])}}"
+    domain: "{{lab.hosts[dict_key].domain}}"
+
+- name: Reboot
+  hosts: dc01,dc02,dc03,srv01,srv03
+  tasks:
+    - name: Reboot
+      win_reboot:
+        reboot_timeout: 600
+        post_reboot_delay: 30
+  #roles:
+  #  - { role: 'reboot', tags: 'reboot' }
+  

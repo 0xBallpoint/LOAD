@@ -1,0 +1,35 @@
+- name: Patch ComputerManagementDsc Module
+  win_shell: |
+    Install-PackageProvider -Name NuGet -Force
+    Install-Module PowerShellGet -AllowClobber -Force
+    Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
+
+- name: Check for ComputerManagementDsc Powershell module
+  win_psmodule:
+    name: ComputerManagementDsc
+    state: present
+
+- name: Enable Remote Desktop
+  win_dsc:
+    resource_name: RemoteDesktopAdmin
+    IsSingleInstance : 'yes'
+    Ensure: present
+    UserAuthentication: Secure
+
+- name: Check for xNetworking Powershell module
+  win_psmodule:
+    name: xNetworking
+    state: present
+
+- name: Allow RDP through Firewall
+  win_dsc:
+    resource_name: xFirewall
+    Name: "Administrator access for RDP (TCP-In)"
+    Ensure: present
+    Enabled: True
+    Profile: "Domain"
+    Direction: "Inbound"
+    Localport: "3389"
+    Protocol: "TCP"
+    Description: "Opens the listener port for RDP"
+

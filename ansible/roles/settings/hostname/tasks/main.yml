@@ -1,0 +1,3 @@
+- name: "Change the hostname"
+  win_hostname:
+    name: "{{hostname}}"

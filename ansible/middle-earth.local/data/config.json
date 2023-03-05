@@ -1,0 +1,602 @@
+{
+"lab" : {
+    "hosts" : {
+        "dc01" : {
+            "hostname" : "minas-tirith",
+            "type" : "dc",
+            "admin_password": "o8W!7xcx-6oqQ3j",
+            "domain" : "middle-earth.local",
+            "path" : "DC=middle-earth,DC=local",
+            "local_groups" : {
+                "Administrators" : [
+                    "middle-earth\\gandalf",
+                    "middle-earth\\aragorn"
+                ],
+                "Remote Desktop Users" : [
+                    "middle-earth\\Domain Admins"
+                ]
+            }
+        },
+        "srv01" : {
+            "hostname" : "moria",
+            "type" : "server",
+            "admin_password": "JmOf4UCk)q#Gsbk",
+            "domain" : "middle-earth.local",
+            "path" : "DC=middle-earth,DC=local",
+            "local_groups" : {
+                "Administrators" : [
+                    "middle-earth\\gimli"
+                ],
+                "Remote Desktop Users" : [
+                    "middle-earth\\FELLOWSHIP"
+                ]
+            },
+            "mssql":{
+                "sa_password": "Much_S3cureP@sswd!",
+                "svcaccount" : "sql_svc",
+                "sysadmins" : [
+                    "middle-earth\\gimli"
+                ],
+                "executeaslogin" : {
+                    "middle-earth\\legolas" : "sa"
+                },
+                "executeasuser" : {
+                    "middle-earth\\aragorn" : "dbo"
+                },
+                "linked_servers": {
+                    "MINAS-MORGUL" : {
+                        "data_src": "minas-morgul.mordor.local",
+                        "users_mapping": [
+                            {"local_login": "middle-earth\\gandalf","remote_login": "sa", "remote_password": "sa_P@ssw0rd!Mord0r"}
+                        ]
+                    }
+                }
+            }
+        },
+        "dc02" : {
+            "hostname" : "rivendell",
+            "type" : "dc",
+            "admin_password": "Nb%@fGDg]jGduKl9",
+            "domain" : "eriador.middle-earth.local",
+            "path" : "DC=eriador,DC=middle-earth,DC=local",
+            "local_groups" : {
+                "Administrators" : [
+                    "eriador\\elrond",
+                    "eriador\\celebrian"
+                ],
+                "Remote Desktop Users" : [
+                    "eriador\\ELF"
+                ]
+            }
+        },
+        "srv02" : {
+            "hostname" : "shire",
+            "type" : "server",
+            "local_root_password": "gjFd9rwav6spxKv",
+            "domain" : "eriador.middle-earth.local",
+            "path" : "DC=eriador,DC=middle-earth,DC=local",
+            "local_groups" : {
+                "Administrators" : [
+                    "eriador\\frodo",
+                    "eriador\\sam"
+                ],
+                "Remote Desktop Users" : [
+                    "eriador\\Elf",
+                    "eriador\\HOBBIT"
+                ]
+            }
+        },
+        "dc03" : {
+            "hostname" : "barad-dur",
+            "type" : "dc",
+            "admin_password": "aTkjwifoech@vzuz",
+            "domain" : "mordor.local",
+            "path" : "DC=mordor,DC=local",
+            "local_groups" : {
+                "Administrators" : [
+                    "mordor\\sauron"
+                ],
+                "Remote Desktop Users" : [
+                    "mordor\\DARKFORCE"
+                ]
+            }
+        },
+        "srv03" : {
+            "hostname" : "minas-morgul",
+            "type" : "server",
+            "admin_password": "Y7Yi3S91(Tnz9U5A",
+            "domain" : "mordor.local",
+            "path" : "DC=mordor,DC=local",
+            "local_groups" : {
+                "Administrators" : [
+                    "mordor\\gothmog"
+                ]
+            },
+            "Remote Desktop Users" : [
+                "mordor\\Darkforce",
+                "mordor\\gothmog"
+            ],
+            "mssql":{
+                "sa_password": "sa_P@ssw0rd!Mord0r",
+                "svcaccount" : "sql_svc",
+                "sysadmins" : [
+                    "mordor\\saruman"
+                ],
+                "executeaslogin" : {
+                    "mordor\\gollum" : "sa"
+                },
+                "executeasuser" : {},
+                "linked_servers": {
+                    "MORIA" : {
+                        "data_src": "moria.middle-earth.local",
+                        "users_mapping": [
+                            {"local_login": "mordor\\saruman","remote_login": "sa", "remote_password": "Sup1_sa_P@ssw0rd!"}
+                        ]
+                    }
+                }
+            }
+        }
+    },
+    "domains" : {
+        "middle-earth.local" : {
+            "dc": "dc01",
+            "safe_mode_password" : "8dCT-DJjgScp",
+            "netbios_name": "middle-earth",
+            "trust" : "mordor.local",
+            "organisation_units" : {
+                "Gondor"          : { "path" : "DC=middle-earth,DC=local"},
+                "Rohan"           : { "path" : "DC=middle-earth,DC=local"},
+                "Lindon"          : { "path" : "DC=middle-earth,DC=local"},
+                "MistyMountains"  : { "path" : "DC=middle-earth,DC=local"},
+                "Mirkwood"        : { "path" : "DC=middle-earth,DC=local"},
+                "ForestOfFangorn" : { "path" : "DC=middle-earth,DC=local"},
+                "Knight" 		  : { "path" : "DC=middle-earth,DC=local"}
+            },
+            "groups" : {
+                "universal" : {},
+                "global" : {
+                    "Men" : {
+                        "managed_by" : "denethor",
+                        "path" : "OU=Gondor,DC=middle-earth,DC=local"
+                    },
+                    "Ents" : {
+                        "managed_by" : "treebeard",
+                        "path" : "OU=ForestOfFangorn,DC=middle-earth,DC=local"
+                    },
+                    "Fellowship" : {
+                        "managed_by" : "gandalf",
+                        "path" : "CN=Users,DC=middle-earth,DC=local"
+                    },
+                    "Ringwraiths" : {
+                        "path" : "OU=Knight,DC=middle-earth,DC=local"
+                    }
+                },
+                "domainlocal" : {
+                }
+            },
+            "multi_domain_groups_member" : {
+            },
+            "acls" : {
+                "GenericAll_user" : {"for": "boromir", "to": "denethor", "right": "GenericAll", "inheritance": "None"},
+                "GenericAll_domadmin" : {"for": "skinbark", "to": "Domain Admins", "right": "GenericAll", "inheritance": "None"},
+                "GenericAll_dc" : {"for": "gimli", "to": "moria$", "right": "GenericAll", "inheritance": "None"},
+                "WriteProperty_domadmin" : {"for": "treebeard", "to": "Domain Admins", "right": "WriteProperty", "inheritance": "All"},
+                "self-self-membership-on-group_domadmin" : {"for": "theoden", "to": "Domain Admins", "right": "Ext-Self-Self-Membership", "inheritance": "None"},
+                "writeproperty-self-membership" : {"for": "gimli", "to": "Domain Admins", "right": "Ext-Write-Self-Membership", "inheritance": "All"},
+                "forcechangepassword" : {"for": "boromir", "to": "faramir", "right": "Ext-User-Force-Change-Password", "inheritance": "None"},
+                "write_on_group" : {"for": "ginglas", "to": "Domain Admins", "right": "WriteOwner", "inheritance": "None"},
+                "GenericWrite_on_user_jaimie_cersei" : {"for": "faramir", "to": "denethor", "right": "GenericWrite", "inheritance": "None"},
+                "Writedacl" : {"for": "boromir", "to": "Men", "right": "WriteDacl", "inheritance": "None"}
+            },
+            "users" : {
+                "denethor": {
+                    "firstname"   : "Denethor",
+                    "surname"     : "-",
+                    "password"    : "Iamtheking",
+                    "city"        : "Minas Tirith",
+                    "description" : "-",
+                    "groups"      : ["Men", "Domain Admins"],
+                    "path"        : "OU=Gondor,DC=middle-earth,DC=local"
+                },
+                "theoden": {
+                    "firstname"   : "Theoden",
+                    "surname"     : "-",
+                    "password"    : "neigh-neigh",
+                    "city"        : "Rohan",
+                    "description" : "King of Rohan",
+                    "groups"      : ["Men"],
+                    "path"        : "OU=Gondor,DC=middle-earth,DC=local"
+                },
+                "faramir": {
+                    "firstname"   : "Faramir",
+                    "surname"     : "-",
+                    "password"    : "Imladr1s",
+                    "city"        : "-",
+                    "description" : "-",
+                    "groups"      : ["Men"],
+                    "path"        : "OU=Gondor,DC=middle-earth,DC=local"
+                },
+                "boromir": {
+                    "firstname"   : "Boromir",
+                    "surname"     : "-",
+                    "password"    : "DeathtoSaur0n",
+                    "city"        : "-",
+                    "description" : "-",
+                    "groups"      : ["Men"],
+                    "path"        : "OU=Gondor,DC=middle-earth,DC=local"
+                },
+
+                "gimli" : {
+                    "firstname"   : "Gimli",
+                    "surname"     : "-",
+                    "password"    : "NobodyTossasADwarf!",
+                    "city"        : "Moria",
+                    "description" : "-",
+                    "groups"      : ["Fellowship"],
+                    "path"        : "OU=MistyMountains,DC=middle-earth,DC=local"
+                },
+                "legolas" : {
+                    "firstname"   : "Legolas",
+                    "surname"     : "-",
+                    "password"    : "Youhavemybow1",
+                    "city"        : "Mirkwood",
+                    "description" : "Greenleaf",
+                    "groups"      : ["Fellowship"],
+                    "path"        : "CN=Users,DC=middle-earth,DC=local",
+                    "spns"        : ["HTTP/arrow.middle-earth.local"]
+                },
+                "aragorn" : {
+                    "firstname"   : "Aragorn",
+                    "surname"     : "-",
+                    "password"    : "Arwen2022",
+                    "city"        : "Gondor",
+                    "description" : "True king of Gondor",
+                    "groups"      : ["Fellowship"],
+                    "path"        : "CN=Users,DC=middle-earth,DC=local"
+                },
+                "Gandalf" : {
+                    "firstname"   : "Gandalf",
+                    "surname"     : "-",
+                    "password"    : "YouShallN0tpaSS$",
+                    "city"        : "-",
+                    "description" : "Gandalf the White",
+                    "groups"      : ["Fellowship"],
+                    "path"        : "CN=Users,DC=middle-earth,DC=local"
+                },
+
+                "treebeard" : {
+                    "firstname"   : "Treebeard",
+                    "surname"     : "-",
+                    "password"    : "Trees01",
+                    "city"        : "Fangorn Forest",
+                    "description" : "-",
+                    "groups"      : ["Ents"],
+                    "path"        : "OU=ForestOfFangorn,DC=middle-earth,DC=local"
+                },
+                "skinbark" : {
+                    "firstname"   : "Skinbark",
+                    "surname"     : "-",
+                    "password"    : "kamanda",
+                    "city"        : "Fangorn Forest",
+                    "description" : "-",
+                    "groups"      : ["Ents"],
+                    "path"        : "OU=ForestOfFangorn,DC=middle-earth,DC=local"
+                },
+                "ginglas" : {
+                    "firstname"   : "Ginglas",
+                    "surname"     : "-",
+                    "password"    : "lindor",
+                    "city"        : "Fangorn Forest",
+                    "description" : "-",
+                    "groups"      : ["Ents"],
+                    "path"        : "OU=ForestOfFangorn,DC=middle-earth,DC=local"
+                },
+				"witchking.angmar" : {
+                    "firstname"   : "WitchKing",
+                    "surname"     : "Angmar",
+                    "password"    : "k8S!ek72",
+                    "city"        : "Mordor",
+                    "description" : "The Witch-King of Angmar",
+                    "groups"      : ["Ringwraiths"],
+                    "path"        : "OU=Knight,DC=middle-earth,DC=local"
+                },
+                "khamul.easterling" : {
+                    "firstname"   : "Khamûl",
+                    "surname"     : "Easterling",
+                    "password"    : "GPPstillStandingStrong2k18",
+                    "city"        : "Mordor",
+                    "description" : "Khamûl the Easterling",
+                    "groups"      : ["Ringwraiths"],
+                    "path"        : "OU=Knight,DC=middle-earth,DC=local"
+                },
+                "sql_svc" : {
+                    "firstname"   : "sql",
+                    "surname"     : "service",
+                    "password"    : "YouWillNotKerboroast1ngMeeeeee",
+                    "city"        : "-",
+                    "description" : "sql service",
+                    "groups"      : [],
+                    "path"        : "CN=Users,DC=middle-earth,DC=local",
+                    "spns"        : ["MSSQLSvc/moria.middle-earth.local:1433","MSSQLSvc/moria.middle-earth.local"]
+                }
+            }
+        },
+        "eriador.middle-earth.local" : {
+            "dc": "dc02",
+            "safe_mode_password" : "NgtI75cKV+Pu",
+            "netbios_name": "eriador",
+            "trust" : "",
+            "organisation_units" : {},
+            "groups" : {
+                "universal" : {},
+                "global" : {
+                    "Elf" : {
+                        "managed_by" : "elrond",
+                        "path" : "CN=Users,DC=eriador,DC=middle-earth,DC=local"
+                    },
+                    "Ringbearer" : {
+                        "managed_by" : "frodo",
+                        "path" : "CN=Users,DC=eriador,DC=middle-earth,DC=local"
+                    }
+                },
+                "domainlocal" : {
+                    "Hobbit" : {
+	                    "managed_by" : "bilbo",
+                        "path" : "CN=Users,DC=eriador,DC=middle-earth,DC=local"
+                    }                    
+                }
+            },
+            "multi_domain_groups_member" : {
+                    "Hobbit": [
+                        "bilbo",
+                        "frodo",
+                        "sam",
+                        "merry",
+                        "pippin",
+                        "mordor.local\\gollum"
+            		]
+            },
+            "acls" : {
+                "anonymous_rpc" : {"for": "NT AUTHORITY\\ANONYMOUS LOGON", "to": "DC=eriador,DC=middle-earth,DC=local", "right": "ReadProperty", "inheritance": "All"},
+                "anonymous_rpc2" : {"for": "NT AUTHORITY\\ANONYMOUS LOGON", "to": "DC=eriador,DC=middle-earth,DC=local", "right": "GenericExecute", "inheritance": "All"}
+            },
+            "users" : {
+                "elrond" : {
+                    "firstname"   : "Elrond",
+                    "surname"     : "-",
+                    "password"    : "-TheRingMustBeDestr0Y-",
+                    "city"        : "Rivendell",
+                    "description" : "Master of Rivendell",
+                    "groups"      : ["Elf", "Domain Admins"],
+                    "path"        : "CN=Users,DC=eriador,DC=middle-earth,DC=local"
+                },
+                "celebrian" : {
+                    "firstname"   : "Celebrian",
+                    "surname"     : "-",
+                    "password"    : "$elfish22",
+                    "city"        : "Rivendell",
+                    "description" : "Lady of Rivendell",
+                    "groups"      : ["Elf", "Domain Admins"],
+                    "path"        : "CN=Users,DC=eriador,DC=middle-earth,DC=local"
+                },
+                "galadriel" : {
+                    "firstname"   : "Galadriel",
+                    "surname"     : "-",
+                    "password"    : "Lothlorien2022!",
+                    "city"        : "Lothlorien",
+                    "description" : "Lady of Light",
+                    "groups"      : ["Elf"],
+                    "path"        : "CN=Users,DC=eriador,DC=middle-earth,DC=local"
+                },
+                "arwen" : {
+                    "firstname"   : "Arwen",
+                    "surname"     : "Undomiel",
+                    "password"    : "password1234",
+                    "city"        : "Rivendell",
+                    "description" : "Daughter of the Elf-queen Galadriel",
+                    "groups"      : ["Elf"],
+                    "path"        : "CN=Users,DC=eriador,DC=middle-earth,DC=local"
+                },
+                "eowyn" : {
+                    "firstname"   : "Eowyn",
+                    "surname"     : "-",
+                    "password"    : "qwertyuiop[",
+                    "city"        : "Rivendell",
+                    "description" : "Killer of the Witch-King of Angmar",
+                    "groups"      : ["Elf"],
+                    "path"        : "CN=Users,DC=eriador,DC=middle-earth,DC=local"
+                },
+                "bilbo" : {
+                    "firstname"   : "Bilbo",
+                    "surname"     : "Baggins",
+                    "password"    : "MyPreci0u$",
+                    "city"        : "Hobbiton",
+                    "description" : "It's mine. MyPreci0u$",
+                    "groups"      : [],
+                    "path"        : "CN=Users,DC=eriador,DC=middle-earth,DC=local"
+                },
+                "frodo" : {
+                    "firstname"   : "Frodo",
+                    "surname"     : "Baggins",
+                    "password"    : "!lordoftherings",
+                    "city"        : "Hobbiton",
+                    "description" : "The ring bearer",
+                    "groups"      : ["Ringbearer"],
+                    "path"        : "CN=Users,DC=eriador,DC=middle-earth,DC=local"
+                },
+                "sam" : {
+                    "firstname"   : "Samsagace",
+                    "surname"     : "Gamegie",
+                    "password"    : "potato",
+                    "city"        : "Hobbiton",
+                    "description" : "It'll Be The Farthest Away From Home I've Ever Been",
+                    "groups"      : [],
+                    "path"        : "CN=Users,DC=eriador,DC=middle-earth,DC=local"
+                },
+                "pippin" : {
+                    "firstname"   : "Peregrin",
+                    "surname"     : "Touque",
+                    "password"    : "Eriador2022!",
+                    "city"        : "Hobbiton",
+                    "description" : "What about second breakfast?",
+                    "groups"      : [],
+                    "path"        : "CN=Users,DC=eriador,DC=middle-earth,DC=local"
+                },
+                "merry" : {
+                    "firstname"   : "Meriadoc",
+                    "surname"     : "Brandybuck",
+                    "password"    : "Summer22",
+                    "city"        : "Hobbiton",
+                    "description" : "I don't think he knows about second breakfast",
+                    "groups"      : [],
+                    "path"        : "CN=Users,DC=eriador,DC=middle-earth,DC=local"
+                },
+                 "glpi" : {
+                    "firstname"   : "glpi",
+                    "surname"     : "service",
+                    "password"    : "A2Mk?fth!9PXRcD",
+                    "city"        : "-",
+                    "description" : "glpi service",
+                    "groups"      : [],
+                    "path"        : "CN=Users,DC=eriador,DC=middle-earth,DC=local"
+                }
+            }
+        },
+        "mordor.local" : {
+            "dc": "dc03",
+            "safe_mode_password" : "Ufe-bVXSx9rk",
+            "netbios_name": "mordor",
+            "ca_server": "Minas-morgul",
+            "trust" : "middle-earth.local",
+            "organisation_units" : {},
+            "groups" : {
+                "universal" : {},
+                "global" : {
+                    "Darkforce" : {
+                        "managed_by" : "sauron",
+                        "path" : "CN=Users,DC=mordor,DC=local"
+                    },
+                    "Prisoner" : {
+                        "managed_by" : "saruman",
+                        "path" : "CN=Users,DC=mordor,DC=local"
+                    },
+                    "Orc" : {
+                        "managed_by" : "gothmog",
+                        "path" : "CN=Users,DC=mordor,DC=local"
+                    }
+                },
+                "domainlocal" : {
+                    "Nazgul" : {
+                        "managed_by" : "dark.marshal",
+                        "path" : "CN=Users,DC=mordor,DC=local"
+                    }
+                }
+            },
+            "multi_domain_groups_member" : {
+                "Nazgul" : [
+                    "middle-earth.local\\Ringwraiths"
+                ]
+            },
+            "acls" : {
+                "GenericAll_" : {"for": "saruman", "to": "gothmog", "right": "GenericAll", "inheritance": "None"},
+                "GenericAll_crossdomain" : {"for": "Nazgul", "to": "Domain Admins", "right": "GenericAll", "inheritance": "None"},
+                "GenericAll_esc4" : {"for": "saruman", "to": "CN=ESC4,CN=Certificate Templates,CN=Public Key Services,CN=Services,CN=Configuration,DC=mordor,DC=local", "right": "GenericAll", "inheritance": "None"},
+                "WriteProperty" : {"for": "lurtz", "to": "ugluk", "right": "WriteProperty", "inheritance": "All"}
+            },
+            "users" : {
+                "sauron" : {
+                    "firstname"   : "sauron",
+                    "surname"     : "-",
+                    "password"    : "AshNazgDurbatuluk", 
+                    "city"        : "-",
+                    "description" : "The Dark Lord",
+                    "groups"      : ["Darkforce", "Domain Admins"],
+                    "path"        : "CN=Users,DC=mordor,DC=local"
+                },
+                "saruman" : {
+                    "firstname"   : "saruman",
+                    "surname"     : "-",
+                    "password"    : "Mordor>*",
+                    "city"        : "Isengard",
+                    "description" : "Saruman the white",
+                    "groups"      : ["Darkforce"],
+                    "path"        : "CN=Users,DC=mordor,DC=local"
+                },
+                "balrog" : {
+                    "firstname"   : "Balrog",
+                    "surname"     : "-",
+                    "password"    : "GRRRRRR!",
+                    "city"        : "-",
+                    "description" : "Demonic monster",
+                    "groups"      : ["Darkforce"],
+                    "path"        : "CN=Users,DC=mordor,DC=local"
+                },
+                "gollum" : {
+                    "firstname"   : "gollum",
+                    "surname"     : "-",
+                    "password"    : "gollum",
+                    "city"        : "-",
+                    "description" : "Smeagol",
+                    "groups"      : ["Prisoner"],
+                    "path"        : "CN=Users,DC=mordor,DC=local"
+                },
+                "gothmog" : {
+                    "firstname"   : "gothmog",
+                    "surname"     : "-",
+                    "password"    : "DamUlDam&0",
+                    "city"        : "-",
+                    "description" : "Lieutenant of Morgul",
+                    "groups"      : ["ORC"],
+                    "path"        : "CN=Users,DC=mordor,DC=local"
+                },
+                "lurtz" : {
+                    "firstname"   : "lurtz",
+                    "surname"     : "-",
+                    "password"    : "DamUlDam&0",
+                    "city"        : "-",
+                    "description" : "-",
+                    "groups"      : ["ORC"],
+                    "path"        : "CN=Users,DC=mordor,DC=local"
+                },
+                "ugluk" : {
+                    "firstname"   : "ugluk",
+                    "surname"     : "-",
+                    "password"    : "DamUlDam&0",
+                    "city"        : "-",
+                    "description" : "-",
+                    "groups"      : ["ORC"],
+                    "path"        : "CN=Users,DC=mordor,DC=local"
+                },
+                "guritz" : {
+                    "firstname"   : "guritz",
+                    "surname"     : "-",
+                    "password"    : "DamUlDam&0",
+                    "city"        : "-",
+                    "description" : "-",
+                    "groups"      : ["ORC"],
+                    "path"        : "CN=Users,DC=mordor,DC=local"
+                },
+                "dark.marshal" : {
+                    "firstname"   : "Dark",
+                    "surname"     : "Marshal",
+                    "password"    : "Mf7I43(q",
+                    "city"        : "-",
+                    "description" : "The Dark Marshal",
+                    "groups"      : ["Nazgul"],
+                    "path"        : "CN=Users,DC=mordor,DC=local"
+                },
+                "sql_svc" : {
+                    "firstname"   : "sql",
+                    "surname"     : "service",
+                    "password"    : "YouWillNotKerboroast1ngMeeeeee",
+                    "city"        : "-",
+                    "description" : "sql service",
+                    "groups"      : [],
+                    "path"        : "CN=Users,DC=mordor,DC=local",
+                    "spns"        : ["MSSQLSvc/minas-morgul.mordor.local:1433","MSSQLSvc/minas-morgul.mordor.local"]
+                }
+            }
+        }
+    }
+}
+}

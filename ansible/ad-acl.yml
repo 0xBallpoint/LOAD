@@ -1,0 +1,18 @@
+---
+# Load datas
+- import_playbook: data.yml
+  vars:
+    data_path: "{{domain_name}}/data/"
+  tags: 'data'
+
+# set AD datas ==================================================================================================
+
+- name: ACL inside AD
+  hosts: dc01,dc02,dc03
+  roles:
+  - { role: 'acl', tags: 'acl'}
+  vars:
+    ad_acls: "{{lab.domains[lab.hosts[dict_key].domain].acls}}"
+    domain: "{{lab.hosts[dict_key].domain}}"
+    domain_username: "{{domain}}\\Administrator"
+    domain_password: "{{lab.hosts[dict_key].admin_password}}"
