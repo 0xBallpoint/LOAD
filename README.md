@@ -245,6 +245,8 @@ You will get an IP in 10.0.20.0/24
 
 # Vulnerabilities
 
+![schema](./docs/schema_middle-earth.png)
+
 ## LINUX
 ```
 SHIRE (srv02)
