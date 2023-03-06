@@ -3,6 +3,9 @@
 # Intro
 Based on AWS-Redteam-Lab and OCD GOAT
 
+The price for running the lab for 125 hours during one month is approximately 14$.
+With Free Tier you get 750h of EC2 per month, there is 6 machines so 125h. But you only get 30Gb of storage. So you need storage for the other 5 VMs : 30Gb * 5 = 150Gb = 14$ / month
+
 # Installation
 
 Just like the GOAD project, the installation is in two part :
