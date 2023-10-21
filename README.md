@@ -135,11 +135,12 @@ aws configure --profile terraform
 4. Create SSH keys for terraform:
 ```bash
 cd LOAD
-ssh-keygen -t rsa -N "" -b 2048 -C "TerraformKey" -f ./terraform/keys/TerraformKey
+ssh-keygen -t rsa -N "" -b 2048 -C "TerraformKey" -f ./terraform/keys/TerraformKey.pem
 ```
 
 4. Run Terraform
 ```bash
+terraform init
 terraform apply
 ```
 

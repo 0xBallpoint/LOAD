@@ -1,7 +1,7 @@
 #- name: "Reboot and wait for the AD system to restart"
 #  win_reboot:
 #    test_command: "Get-ADUser -Identity Administrator -Properties *"
-#    post_reboot_delay: 100
+#    post_reboot_delay: 10
 #
 #- name: "synchronizes all domains"
 #  win_shell: repadmin /syncall /Ade
